@@ -41,9 +41,7 @@ toggle_cursor() {
   local index="$CURSOR"
 
   if [ "$index" -eq "${#FEATURE_DIRS[@]}" ]; then
-    for i in "${!SELECTED[@]}"; do
-      SELECTED[$i]="1"
-    done
+    toggle_all
     return 0
   fi
 
@@ -52,6 +50,27 @@ toggle_cursor() {
   else
     SELECTED[$index]="1"
   fi
+}
+
+all_selected() {
+  local selected
+
+  for selected in "${SELECTED[@]}"; do
+    [ "$selected" = "1" ] || return 1
+  done
+  return 0
+}
+
+toggle_all() {
+  local value="1"
+
+  if all_selected; then
+    value="0"
+  fi
+
+  for i in "${!SELECTED[@]}"; do
+    SELECTED[$i]="$value"
+  done
 }
 
 draw_menu() {
@@ -77,11 +96,17 @@ draw_menu() {
   else
     pointer=" "
   fi
-  printf '%s [ ] Remove Everything\n' "$pointer"
+  if all_selected; then
+    marker="x"
+  else
+    marker=" "
+  fi
+  printf '%s [%s] Remove Everything\n' "$pointer" "$marker"
   cat <<'EOF'
 
 Up/Down or j/k = Move
 Space = Select
+a = Select/Deselect All
 Enter = Uninstall
 q = Quit
 EOF
@@ -120,6 +145,9 @@ while true; do
       ;;
     " ")
       toggle_cursor
+      ;;
+    a|A)
+      toggle_all
       ;;
     j)
       if [ "$CURSOR" -lt "${#FEATURE_DIRS[@]}" ]; then

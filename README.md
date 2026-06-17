@@ -27,6 +27,7 @@ Select features to install
 
 Up/Down or j/k = Move
 Space = Select
+a = Select/Deselect All
 Enter = Install
 ```
 
@@ -53,7 +54,7 @@ cd macos-productivity-kit
 ./install.sh
 ```
 
-Use Up/Down or `j`/`k` to move, Space to select, and Enter to install selected features. Select `Install Everything` to enable every bundled feature.
+Use Up/Down or `j`/`k` to move, Space to select, `a` to select or deselect all, and Enter to install selected features. Select `Install Everything` to toggle every bundled feature.
 
 Workflows are installed into:
 
