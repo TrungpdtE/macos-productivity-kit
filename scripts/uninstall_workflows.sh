@@ -2,6 +2,7 @@
 set -euo pipefail
 
 source "$(dirname "${BASH_SOURCE[0]}")/utils.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/i18n.sh"
 
 uninstall_feature_workflow() {
   local feature_dir="$1"

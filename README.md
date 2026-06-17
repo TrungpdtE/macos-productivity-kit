@@ -54,6 +54,13 @@ cd macos-productivity-kit
 ./install.sh
 ```
 
+English/Vietnamese installers:
+
+```sh
+./install_en.sh
+./install_vi.sh
+```
+
 Use Up/Down or `j`/`k` to move, Space to select, `a` to select or deselect all, and Enter to install selected features. Select `Install Everything` to toggle every bundled feature.
 
 Workflows are installed into:
@@ -64,10 +71,24 @@ Workflows are installed into:
 
 The installer asks before overwriting an existing workflow with the same name.
 
+Repair an existing install after workflow template updates:
+
+```sh
+MPK_FORCE_OVERWRITE=1 ./install_en.sh
+killall Finder
+```
+
 ## Uninstall
 
 ```sh
 ./uninstall.sh
+```
+
+English/Vietnamese uninstallers:
+
+```sh
+./uninstall_en.sh
+./uninstall_vi.sh
 ```
 
 The uninstaller lists installed features recorded by the kit and lets you remove selected workflows.

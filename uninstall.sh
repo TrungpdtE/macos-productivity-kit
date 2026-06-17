@@ -2,15 +2,45 @@
 set -euo pipefail
 
 source "$(dirname "${BASH_SOURCE[0]}")/scripts/utils.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/scripts/i18n.sh"
+
+ui_text() {
+  local key="$1"
+  if [ "${MPK_LANG:-en}" = "vi" ]; then
+    case "$key" in
+      title) printf 'Trình gỡ macOS Productivity Kit' ;;
+      select_features) printf 'Chọn tính năng muốn gỡ' ;;
+      remove_everything) printf 'Gỡ tất cả' ;;
+      move) printf 'Lên/Xuống hoặc j/k = Di chuyển' ;;
+      select) printf 'Space = Chọn/Bỏ chọn' ;;
+      all) printf 'a = Chọn/Bỏ chọn tất cả' ;;
+      enter) printf 'Enter = Gỡ cài đặt' ;;
+      quit) printf 'q = Thoát' ;;
+      *) printf '%s' "$key" ;;
+    esac
+  else
+    case "$key" in
+      title) printf 'macOS Productivity Kit Uninstaller' ;;
+      select_features) printf 'Select installed features to remove' ;;
+      remove_everything) printf 'Remove Everything' ;;
+      move) printf 'Up/Down or j/k = Move' ;;
+      select) printf 'Space = Select' ;;
+      all) printf 'a = Select/Deselect All' ;;
+      enter) printf 'Enter = Uninstall' ;;
+      quit) printf 'q = Quit' ;;
+      *) printf '%s' "$key" ;;
+    esac
+  fi
+}
 
 print_header() {
   clear 2>/dev/null || true
-  cat <<'EOF'
+  cat <<EOF
 ====================================
- macOS Productivity Kit Uninstaller
+ $(ui_text title)
 ====================================
 
-Select installed features to remove
+$(ui_text select_features)
 
 EOF
 }
@@ -27,7 +57,7 @@ for feature_dir in "${ALL_FEATURES[@]}"; do
 done
 
 if [ "${#FEATURE_DIRS[@]}" -eq 0 ]; then
-  info "No installed features recorded."
+  [ "${MPK_LANG:-en}" = "vi" ] && info "Chưa ghi nhận tính năng nào đã cài." || info "No installed features recorded."
   exit 0
 fi
 
@@ -88,7 +118,7 @@ draw_menu() {
     else
       marker=" "
     fi
-    printf '%s [%s] %s\n' "$pointer" "$marker" "$(feature_name "$feature_dir")"
+    printf '%s [%s] %s\n' "$pointer" "$marker" "$(feature_name_i18n "$feature_dir")"
     index=$((index + 1))
   done
   if [ "$CURSOR" -eq "${#FEATURE_DIRS[@]}" ]; then
@@ -101,14 +131,14 @@ draw_menu() {
   else
     marker=" "
   fi
-  printf '%s [%s] Remove Everything\n' "$pointer" "$marker"
-  cat <<'EOF'
+  printf '%s [%s] %s\n' "$pointer" "$marker" "$(ui_text remove_everything)"
+  cat <<EOF
 
-Up/Down or j/k = Move
-Space = Select
-a = Select/Deselect All
-Enter = Uninstall
-q = Quit
+$(ui_text move)
+$(ui_text select)
+$(ui_text all)
+$(ui_text enter)
+$(ui_text quit)
 EOF
 }
 
@@ -124,10 +154,10 @@ uninstall_selected() {
   done
 
   if [ "$removed" -eq 0 ]; then
-    info "No features selected."
+    [ "${MPK_LANG:-en}" = "vi" ] && info "Chưa chọn tính năng nào." || info "No features selected."
   else
     info ""
-    info "Removed $removed feature(s)."
+    [ "${MPK_LANG:-en}" = "vi" ] && info "Đã gỡ $removed tính năng." || info "Removed $removed feature(s)."
   fi
 }
 

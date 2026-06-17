@@ -2,6 +2,7 @@
 set -euo pipefail
 
 source "$(dirname "${BASH_SOURCE[0]}")/utils.sh"
+source "$(dirname "${BASH_SOURCE[0]}")/i18n.sh"
 
 escape_plist() {
   printf '%s' "$1" |
@@ -15,18 +16,55 @@ escape_plist() {
 write_workflow() {
   local feature_dir="$1"
   local workflow_path="$2"
-  local workflow_name script accepts input_mode escaped_script escaped_name escaped_accepts escaped_input
+  local workflow_name script effective_script accepts input_mode feature_id escaped_id escaped_script escaped_name escaped_accepts escaped_input
 
-  workflow_name="$(feature_workflow_name "$feature_dir")"
+  if [ "${MPK_LANG:-en}" = "vi" ]; then
+    workflow_name="$(workflow_name_i18n "$feature_dir")"
+  else
+    workflow_name="$(feature_workflow_name "$feature_dir")"
+  fi
   script="$(feature_script "$feature_dir")"
+  feature_id="$(feature_id "$feature_dir")"
+  effective_script="$(cat <<'SCRIPT'
+if [ "$#" -eq 0 ]; then
+  finder_items="$(osascript <<'APPLESCRIPT' 2>/dev/null || true
+tell application "Finder"
+  set output to ""
+  if (count of selection) > 0 then
+    repeat with itemRef in selection
+      set output to output & POSIX path of (itemRef as alias) & linefeed
+    end repeat
+  else
+    try
+      set output to POSIX path of (insertion location as alias) & linefeed
+    end try
+  end if
+  return output
+end tell
+APPLESCRIPT
+)"
+  if [ -n "$finder_items" ]; then
+    old_ifs="$IFS"
+    IFS='
+'
+    set -- $finder_items
+    IFS="$old_ifs"
+  fi
+fi
+
+SCRIPT
+)"
+  effective_script="${effective_script}
+${script}"
   accepts="$(feature_accepts "$feature_dir")"
   input_mode="$(feature_input_mode "$feature_dir")"
 
   [ -n "$accepts" ] || accepts="public.item"
   [ -n "$input_mode" ] || input_mode="as arguments"
 
-  escaped_script="$(escape_plist "$script")"
+  escaped_script="$(escape_plist "$effective_script")"
   escaped_name="$(escape_plist "$workflow_name")"
+  escaped_id="$(escape_plist "$feature_id")"
   escaped_accepts="$(escape_plist "$accepts")"
   escaped_input="$(escape_plist "$input_mode")"
 
@@ -36,6 +74,14 @@ write_workflow() {
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+  <key>CFBundleDevelopmentRegion</key>
+  <string>en</string>
+  <key>CFBundleIdentifier</key>
+  <string>com.macos-productivity-kit.${escaped_id}</string>
+  <key>CFBundleName</key>
+  <string>${escaped_name}</string>
+  <key>CFBundleShortVersionString</key>
+  <string>1.0</string>
   <key>NSServices</key>
   <array>
     <dict>
