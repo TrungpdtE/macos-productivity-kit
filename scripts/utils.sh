@@ -106,6 +106,10 @@ confirm_overwrite() {
     return 0
   fi
 
+  if [ "${MPK_FORCE_OVERWRITE:-0}" = "1" ]; then
+    return 0
+  fi
+
   printf 'File already exists: %s\n' "$path"
   printf 'Overwrite it? [y/N] '
   IFS= read -r answer

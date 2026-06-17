@@ -46,7 +46,12 @@ write_workflow() {
       </dict>
       <key>NSMessage</key>
       <string>runWorkflowAsService</string>
-      <key>NSSendTypes</key>
+      <key>NSRequiredContext</key>
+      <dict>
+        <key>NSApplicationIdentifier</key>
+        <string>com.apple.finder</string>
+      </dict>
+      <key>NSSendFileTypes</key>
       <array>
         <string>${escaped_accepts}</string>
       </array>
@@ -61,6 +66,10 @@ EOF
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+  <key>AMDocumentVersion</key>
+  <string>2</string>
+  <key>AMWorkflowVersion</key>
+  <string>2.0</string>
   <key>actions</key>
   <array>
     <dict>
@@ -127,9 +136,26 @@ EOF
   <dict/>
   <key>workflowMetaData</key>
   <dict>
+    <key>applicationBundleIDsByPath</key>
+    <dict>
+      <key>/System/Library/CoreServices/Finder.app</key>
+      <string>com.apple.finder</string>
+    </dict>
+    <key>applicationPaths</key>
+    <array>
+      <string>/System/Library/CoreServices/Finder.app</string>
+    </array>
+    <key>serviceApplicationBundleIdentifier</key>
+    <string>com.apple.finder</string>
+    <key>serviceApplicationPath</key>
+    <string>/System/Library/CoreServices/Finder.app</string>
     <key>serviceInputTypeIdentifier</key>
     <string>${escaped_accepts}</string>
     <key>serviceInputTypeIdentifierVersion</key>
+    <integer>1</integer>
+    <key>serviceOutputTypeIdentifier</key>
+    <string>com.apple.Automator.nothing</string>
+    <key>serviceOutputTypeIdentifierVersion</key>
     <integer>1</integer>
     <key>workflowTypeIdentifier</key>
     <string>com.apple.Automator.servicesMenu</string>
