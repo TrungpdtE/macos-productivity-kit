@@ -1,0 +1,11 @@
+{
+  "id": "convert-png-jpg",
+  "name": "Convert PNG to JPG",
+  "category": "File Utilities",
+  "workflow_name": "Convert PNG to JPG",
+  "description": "Convert selected PNG files to JPG using sips.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "for item in \"$@\"; do\n  case \"$item\" in\n    *.png|*.PNG) sips -s format jpeg \"$item\" --out \"${item%.*}.jpg\" >/dev/null ;;\n  esac\ndone\n"
+}

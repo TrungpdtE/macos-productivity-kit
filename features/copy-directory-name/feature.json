@@ -1,0 +1,11 @@
+{
+  "id": "copy-directory-name",
+  "name": "Copy Directory Name",
+  "category": "Clipboard",
+  "workflow_name": "Copy Directory Name",
+  "description": "Copy selected parent directory names to the clipboard.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "for item in \"$@\"; do basename \"$(dirname \"$item\")\"; done | pbcopy\n"
+}

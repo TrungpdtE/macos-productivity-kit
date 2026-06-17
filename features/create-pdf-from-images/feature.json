@@ -1,0 +1,11 @@
+{
+  "id": "create-pdf-from-images",
+  "name": "Create PDF from Images",
+  "category": "File Utilities",
+  "workflow_name": "Create PDF from Images",
+  "description": "Create a PDF from selected images.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "out=\"$(dirname \"${1:-$PWD}\")/images-$(date +%Y%m%d-%H%M%S).pdf\"\n/System/Library/Automator/Combine\\ PDF\\ Pages.action/Contents/Resources/join.py -o \"$out\" \"$@\" 2>/dev/null || printf \"PDF creation failed\\n\" >&2\n"
+}

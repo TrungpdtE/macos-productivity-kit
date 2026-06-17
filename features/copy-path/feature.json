@@ -1,0 +1,11 @@
+{
+  "id": "copy-path",
+  "name": "Copy Full Path",
+  "category": "Finder",
+  "workflow_name": "Copy Full Path",
+  "description": "Copy selected Finder item paths to the clipboard.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "printf \"%s\\n\" \"$@\" | pbcopy\n"
+}

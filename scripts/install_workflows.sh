@@ -1,0 +1,167 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+source "$(dirname "${BASH_SOURCE[0]}")/utils.sh"
+
+escape_plist() {
+  printf '%s' "$1" |
+    sed \
+      -e 's/&/\&amp;/g' \
+      -e 's/</\&lt;/g' \
+      -e 's/>/\&gt;/g' \
+      -e 's/"/\&quot;/g'
+}
+
+write_workflow() {
+  local feature_dir="$1"
+  local workflow_path="$2"
+  local workflow_name script accepts input_mode escaped_script escaped_name escaped_accepts escaped_input
+
+  workflow_name="$(feature_workflow_name "$feature_dir")"
+  script="$(feature_script "$feature_dir")"
+  accepts="$(feature_accepts "$feature_dir")"
+  input_mode="$(feature_input_mode "$feature_dir")"
+
+  [ -n "$accepts" ] || accepts="public.item"
+  [ -n "$input_mode" ] || input_mode="as arguments"
+
+  escaped_script="$(escape_plist "$script")"
+  escaped_name="$(escape_plist "$workflow_name")"
+  escaped_accepts="$(escape_plist "$accepts")"
+  escaped_input="$(escape_plist "$input_mode")"
+
+  mkdir -p "$workflow_path/Contents"
+  cat >"$workflow_path/Contents/Info.plist" <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>NSServices</key>
+  <array>
+    <dict>
+      <key>NSMenuItem</key>
+      <dict>
+        <key>default</key>
+        <string>${escaped_name}</string>
+      </dict>
+      <key>NSMessage</key>
+      <string>runWorkflowAsService</string>
+      <key>NSSendTypes</key>
+      <array>
+        <string>${escaped_accepts}</string>
+      </array>
+    </dict>
+  </array>
+</dict>
+</plist>
+EOF
+
+  cat >"$workflow_path/Contents/document.wflow" <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>actions</key>
+  <array>
+    <dict>
+      <key>action</key>
+      <dict>
+        <key>AMAccepts</key>
+        <dict>
+          <key>Container</key>
+          <string>List</string>
+          <key>Optional</key>
+          <true/>
+          <key>Types</key>
+          <array>
+            <string>${escaped_accepts}</string>
+          </array>
+        </dict>
+        <key>AMActionVersion</key>
+        <string>2.0.3</string>
+        <key>AMApplication</key>
+        <array>
+          <string>Automator</string>
+        </array>
+        <key>AMParameterProperties</key>
+        <dict>
+          <key>COMMAND_STRING</key>
+          <dict/>
+          <key>inputMethod</key>
+          <dict/>
+          <key>shell</key>
+          <dict/>
+        </dict>
+        <key>AMProvides</key>
+        <dict>
+          <key>Container</key>
+          <string>List</string>
+          <key>Types</key>
+          <array>
+            <string>public.item</string>
+          </array>
+        </dict>
+        <key>ActionBundlePath</key>
+        <string>/System/Library/Automator/Run Shell Script.action</string>
+        <key>ActionName</key>
+        <string>Run Shell Script</string>
+        <key>ActionParameters</key>
+        <dict>
+          <key>COMMAND_STRING</key>
+          <string>${escaped_script}</string>
+          <key>CheckedForUserDefaultShell</key>
+          <true/>
+          <key>inputMethod</key>
+          <integer>1</integer>
+          <key>shell</key>
+          <string>/bin/bash</string>
+          <key>source</key>
+          <string></string>
+        </dict>
+      </dict>
+      <key>isViewVisible</key>
+      <false/>
+    </dict>
+  </array>
+  <key>connectors</key>
+  <dict/>
+  <key>workflowMetaData</key>
+  <dict>
+    <key>serviceInputTypeIdentifier</key>
+    <string>${escaped_accepts}</string>
+    <key>serviceInputTypeIdentifierVersion</key>
+    <integer>1</integer>
+    <key>workflowTypeIdentifier</key>
+    <string>com.apple.Automator.servicesMenu</string>
+  </dict>
+</dict>
+</plist>
+EOF
+}
+
+install_feature_workflow() {
+  local feature_dir="$1"
+  local id workflow_path
+
+  id="$(feature_id "$feature_dir")"
+  workflow_path="$(workflow_path_for_feature "$feature_dir")"
+
+  ensure_dir "$SERVICES_DIR"
+  if ! confirm_overwrite "$workflow_path"; then
+    info "Skipped $(feature_name "$feature_dir")."
+    return 0
+  fi
+
+  rm -rf "$workflow_path"
+  write_workflow "$feature_dir" "$workflow_path"
+  record_installed_feature "$id"
+  info "Installed $(feature_name "$feature_dir")"
+}
+
+if [ "${1:-}" ]; then
+  install_feature_workflow "$1"
+else
+  discover_features | while IFS= read -r feature_dir; do
+    install_feature_workflow "$feature_dir"
+  done
+fi

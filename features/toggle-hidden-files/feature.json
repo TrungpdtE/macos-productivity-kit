@@ -1,0 +1,11 @@
+{
+  "id": "toggle-hidden-files",
+  "name": "Reveal Hidden Files Toggle",
+  "category": "Finder",
+  "workflow_name": "Reveal Hidden Files Toggle",
+  "description": "Toggle Finder hidden file visibility.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "current=\"$(defaults read com.apple.finder AppleShowAllFiles 2>/dev/null || printf false)\"\nif [ \"$current\" = \"true\" ] || [ \"$current\" = \"1\" ]; then\n  defaults write com.apple.finder AppleShowAllFiles -bool false\nelse\n  defaults write com.apple.finder AppleShowAllFiles -bool true\nfi\nkillall Finder\n"
+}

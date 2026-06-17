@@ -1,0 +1,11 @@
+{
+  "id": "create-todays-note",
+  "name": "Create Today's Note",
+  "category": "Productivity",
+  "workflow_name": "Create Today's Note",
+  "description": "Create a dated Markdown note in the selected folder.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "target=\"${1:-$PWD}\"\nif [ -f \"$target\" ]; then\n  target=\"$(dirname \"$target\")\"\nfi\n\nfile=\"$target/$(date +%Y-%m-%d).md\"\nprintf \"# %s\\n\\n\" \"$(date +%Y-%m-%d)\" >\"$file\"\nopen \"$file\"\n"
+}

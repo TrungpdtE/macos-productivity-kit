@@ -1,0 +1,11 @@
+{
+  "id": "empty-trash",
+  "name": "Empty Trash",
+  "category": "Finder",
+  "workflow_name": "Empty Trash",
+  "description": "Empty the current user's Trash.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "osascript -e 'tell application \"Finder\" to empty trash'\n"
+}

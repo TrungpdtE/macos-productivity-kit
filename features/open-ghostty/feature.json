@@ -1,0 +1,11 @@
+{
+  "id": "open-ghostty",
+  "name": "Open Ghostty Here",
+  "category": "Finder",
+  "workflow_name": "Open Ghostty Here",
+  "description": "Open Ghostty in the selected Finder folder.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "target=\"${1:-$PWD}\"\nif [ -f \"$target\" ]; then\n  target=\"$(dirname \"$target\")\"\nfi\nopen -a Ghostty \"$target\"\n"
+}

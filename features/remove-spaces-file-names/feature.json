@@ -1,0 +1,11 @@
+{
+  "id": "remove-spaces-file-names",
+  "name": "Remove Spaces From File Names",
+  "category": "File Utilities",
+  "workflow_name": "Remove Spaces From File Names",
+  "description": "Replace spaces in selected file names with hyphens.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "for item in \"$@\"; do\n  dir=\"$(dirname \"$item\")\"\n  base=\"$(basename \"$item\")\"\n  clean=\"$(printf \"%s\" \"$base\" | tr \" \" \"-\")\"\n  [ \"$base\" = \"$clean\" ] || mv \"$item\" \"$dir/$clean\"\ndone\n"
+}

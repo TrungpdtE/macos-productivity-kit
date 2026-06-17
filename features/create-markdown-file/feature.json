@@ -1,0 +1,11 @@
+{
+  "id": "create-markdown-file",
+  "name": "Create Markdown File",
+  "category": "Finder",
+  "workflow_name": "Create Markdown File",
+  "description": "Create untitled.md in the selected folder.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "target=\"${1:-$PWD}\"\nif [ -f \"$target\" ]; then\n  target=\"$(dirname \"$target\")\"\nfi\n\nfile=\"$target/untitled.md\"\ni=1\nwhile [ -e \"$file\" ]; do\n  file=\"$target/untitled-$i.md\"\n  i=$((i + 1))\ndone\nprintf \"# Untitled\\n\" >\"$file\"\nopen -R \"$file\"\n"
+}

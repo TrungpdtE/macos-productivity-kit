@@ -1,0 +1,11 @@
+{
+  "id": "restart-finder",
+  "name": "Restart Finder",
+  "category": "Finder",
+  "workflow_name": "Restart Finder",
+  "description": "Restart Finder.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "killall Finder\n"
+}

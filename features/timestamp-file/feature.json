@@ -1,0 +1,11 @@
+{
+  "id": "timestamp-file",
+  "name": "Timestamp File",
+  "category": "Productivity",
+  "workflow_name": "Timestamp File",
+  "description": "Append a timestamp to selected file names.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "stamp=\"$(date +%Y%m%d-%H%M%S)\"\nfor item in \"$@\"; do\n  dir=\"$(dirname \"$item\")\"\n  base=\"$(basename \"$item\")\"\n  mv \"$item\" \"$dir/$stamp-$base\"\ndone\n"
+}

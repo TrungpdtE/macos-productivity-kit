@@ -1,0 +1,11 @@
+{
+  "id": "zip-folder",
+  "name": "Compress Folder",
+  "category": "Finder",
+  "workflow_name": "Compress Folder",
+  "description": "Create zip archives for selected files or folders.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "for item in \"$@\"; do\n  parent=\"$(dirname \"$item\")\"\n  name=\"$(basename \"$item\")\"\n  (cd \"$parent\" && /usr/bin/zip -r \"$name.zip\" \"$name\")\ndone\n"
+}

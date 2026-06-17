@@ -1,0 +1,11 @@
+{
+  "id": "extract-zip",
+  "name": "Extract Zip",
+  "category": "Finder",
+  "workflow_name": "Extract Zip",
+  "description": "Extract selected zip files beside the original archive.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "for item in \"$@\"; do\n  case \"$item\" in\n    *.zip) unzip -q \"$item\" -d \"$(dirname \"$item\")\" ;;\n  esac\ndone\n"
+}

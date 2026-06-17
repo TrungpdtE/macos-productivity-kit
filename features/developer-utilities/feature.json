@@ -1,0 +1,11 @@
+{
+  "id": "developer-utilities",
+  "name": "Developer Utilities",
+  "category": "Developer",
+  "workflow_name": "Developer Utilities",
+  "description": "Create common developer utility files in the selected folder.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "target=\"${1:-$PWD}\"\nif [ -f \"$target\" ]; then\n  target=\"$(dirname \"$target\")\"\nfi\n\n: >\"$target/.env.example\"\n: >\"$target/README.md\"\n: >\"$target/.gitignore\"\n"
+}

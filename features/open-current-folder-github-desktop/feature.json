@@ -1,0 +1,11 @@
+{
+  "id": "open-current-folder-github-desktop",
+  "name": "Open Current Folder In GitHub Desktop",
+  "category": "Finder",
+  "workflow_name": "Open Current Folder In GitHub Desktop",
+  "description": "Open the selected folder in GitHub Desktop.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "target=\"${1:-$PWD}\"\nif [ -f \"$target\" ]; then\n  target=\"$(dirname \"$target\")\"\nfi\nopen -a \"GitHub Desktop\" \"$target\"\n"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "open-terminal",
+  "name": "Open Terminal Here",
+  "category": "Finder",
+  "workflow_name": "Open Terminal Here",
+  "description": "Open Terminal in the selected Finder folder.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "target=\"${1:-$PWD}\"\nif [ -f \"$target\" ]; then\n  target=\"$(dirname \"$target\")\"\nfi\nopen -a Terminal \"$target\"\n"
+}

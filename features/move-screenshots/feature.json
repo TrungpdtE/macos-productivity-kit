@@ -1,0 +1,11 @@
+{
+  "id": "move-screenshots",
+  "name": "Move Screenshots",
+  "category": "Productivity",
+  "workflow_name": "Move Screenshots",
+  "description": "Move screenshots from Desktop into a Screenshots folder.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "dest=\"$HOME/Pictures/Screenshots\"\nmkdir -p \"$dest\"\nfind \"$HOME/Desktop\" -maxdepth 1 -type f -name \"Screenshot*.png\" -exec mv {} \"$dest/\" \\;\n"
+}

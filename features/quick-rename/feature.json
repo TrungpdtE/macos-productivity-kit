@@ -1,0 +1,11 @@
+{
+  "id": "quick-rename",
+  "name": "Quick Rename",
+  "category": "Productivity",
+  "workflow_name": "Quick Rename",
+  "description": "Prompt for a new base name and rename selected files.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "name=\"$(osascript -e 'text returned of (display dialog \"New base name\" default answer \"file\")')\"\ni=1\nfor item in \"$@\"; do\n  dir=\"$(dirname \"$item\")\"\n  ext=\"${item##*.}\"\n  mv \"$item\" \"$dir/$name-$(printf \"%03d\" \"$i\").$ext\"\n  i=$((i + 1))\ndone\n"
+}

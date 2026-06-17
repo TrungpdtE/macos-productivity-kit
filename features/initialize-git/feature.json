@@ -1,0 +1,11 @@
+{
+  "id": "initialize-git",
+  "name": "Initialize Git Repository",
+  "category": "Developer",
+  "workflow_name": "Initialize Git Repository",
+  "description": "Run git init in the selected folder.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "target=\"${1:-$PWD}\"\nif [ -f \"$target\" ]; then\n  target=\"$(dirname \"$target\")\"\nfi\ngit -C \"$target\" init\n"
+}

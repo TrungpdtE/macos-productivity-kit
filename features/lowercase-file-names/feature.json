@@ -1,0 +1,11 @@
+{
+  "id": "lowercase-file-names",
+  "name": "Lowercase File Names",
+  "category": "File Utilities",
+  "workflow_name": "Lowercase File Names",
+  "description": "Rename selected files to lowercase.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "for item in \"$@\"; do\n  dir=\"$(dirname \"$item\")\"\n  base=\"$(basename \"$item\")\"\n  lower=\"$(printf \"%s\" \"$base\" | tr \"[:upper:]\" \"[:lower:]\")\"\n  [ \"$base\" = \"$lower\" ] || mv \"$item\" \"$dir/$lower\"\ndone\n"
+}

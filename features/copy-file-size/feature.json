@@ -1,0 +1,11 @@
+{
+  "id": "copy-file-size",
+  "name": "Copy File Size",
+  "category": "Clipboard",
+  "workflow_name": "Copy File Size",
+  "description": "Copy selected file sizes to the clipboard.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "du -sh \"$@\" | pbcopy\n"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "open-intellij",
+  "name": "Open IntelliJ Here",
+  "category": "Finder",
+  "workflow_name": "Open IntelliJ Here",
+  "description": "Open the selected folder in IntelliJ IDEA.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "target=\"${1:-$PWD}\"\nif [ -f \"$target\" ]; then\n  target=\"$(dirname \"$target\")\"\nfi\nopen -a \"IntelliJ IDEA\" \"$target\"\n"
+}

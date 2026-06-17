@@ -1,0 +1,11 @@
+{
+  "id": "finder-cleanup",
+  "name": "Finder Cleanup",
+  "category": "Finder",
+  "workflow_name": "Finder Cleanup",
+  "description": "Remove .DS_Store files from selected folders.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "for item in \"$@\"; do\n  if [ -d \"$item\" ]; then\n    find \"$item\" -name .DS_Store -delete\n  fi\ndone\n"
+}

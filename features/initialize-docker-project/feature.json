@@ -1,0 +1,11 @@
+{
+  "id": "initialize-docker-project",
+  "name": "Initialize Docker Project",
+  "category": "Developer",
+  "workflow_name": "Initialize Docker Project",
+  "description": "Create Dockerfile and .dockerignore.",
+  "type": "automator-workflow",
+  "accepts": "public.item",
+  "input_mode": "as arguments",
+  "script": "target=\"${1:-$PWD}\"\nif [ -f \"$target\" ]; then\n  target=\"$(dirname \"$target\")\"\nfi\n\ncat >\"$target/Dockerfile\" <<'EOF'\nFROM alpine:latest\nWORKDIR /app\nCMD [\"sh\"]\nEOF\ncat >\"$target/.dockerignore\" <<'EOF'\n.git\nnode_modules\n.venv\nEOF\n"
+}
